@@ -2,22 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\UserNotFoundException;
+use App\Exceptions\UserValidateRouteParameterException;
+use App\Interfaces\UserRepositoryInterface;
 use Illuminate\Http\Request;
 
 class UserController extends BaseController
 {
+    /**
+     * @var UserRepositoryInterface
+     */
+    protected UserRepositoryInterface $userRepository;
+
+    public function __construct()
+    {
+        $this->userRepository = app(UserRepositoryInterface::class);
+    }
     public function index()
     {
-        dd(__METHOD__);
+        return __METHOD__;
     }
 
     public function create()
     {
-        dd(__METHOD__);
+        return __METHOD__;
     }
 
-    public function show()
+    public function show($id)
     {
-        dd(__METHOD__);
+        $data = $this->userRepository->getUserById($id);
+
+        return response()->json($data, 200);
     }
 }

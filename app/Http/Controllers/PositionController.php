@@ -24,14 +24,8 @@ class PositionController extends BaseController
      */
     public function index(): JsonResponse
     {
-        $data['success'] = false;
-        $position = $this->positionRepository->getAllPosition();
-        if ($position->isEmpty()) {
-            $data['message'] = 'Positions not found';
-            return response()->json($data, 422);
-        }
-        $data['positions'] = $position;
+        $positions = $this->positionRepository->getAllPosition();
 
-        return response()->json($data, 200);
+        return response()->json($positions, 200);
     }
 }
