@@ -19,7 +19,7 @@ class UserValidateRouteParameterException extends Exception
             $data['message'] = 'Validation failed';
             $data['fails']['user_id'] = ['The user_id must be an integer.'];
 
-            return response()->json($data, 400);
+            return response()->json($data, 422);
         }
     }
 }

@@ -30,8 +30,6 @@ class PositionRepository extends CoreRepository implements PositionRepositoryInt
             throw new PositionNotFoundException();
         }
 
-        $response = PositionCollection::make($positions);
-
-        return $response;
+        return PositionCollection::make($positions);
     }
 }
