@@ -4,22 +4,21 @@ namespace App\Exceptions;
 
 use Exception;
 
-class UserValidateRouteParameterException extends Exception
+class NotFoundException extends Exception
 {
     /**
      * Render the exception as an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|void
      */
     public function render($request)
     {
         if ($request->wantsJson()) {
             $data['success'] = false;
-            $data['message'] = 'Validation failed';
-            $data['fails']['user_id'] = ['The user_id must be an integer.'];
+            $data['message'] = 'Page not found';
 
-            return response()->json($data, 400);
+            return response()->json($data, 404);
         }
     }
 }

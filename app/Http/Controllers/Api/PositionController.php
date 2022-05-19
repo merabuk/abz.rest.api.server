@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Interfaces\PositionRepositoryInterface;
 use http\Env\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class PositionController extends BaseController
+class PositionController extends ApiController
 {
     /**
      * @var PositionRepositoryInterface

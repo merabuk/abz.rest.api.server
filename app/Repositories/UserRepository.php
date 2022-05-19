@@ -2,39 +2,44 @@
 
 namespace App\Repositories;
 
-use App\Exceptions\UserNotFoundException;
-use App\Exceptions\UserValidateRouteParameterException;
-use App\Http\Resources\UserCollection;
-use App\Http\Resources\UserShowResource;
 use App\Interfaces\UserRepositoryInterface;
-use App\Models\User as Model;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserRepository extends CoreRepository implements UserRepositoryInterface
 {
+    /**
+     * @var string[]
+     */
+    protected array $columns = [
+        'id',
+        'name',
+        'email',
+        'phone',
+        'position_id',
+        'created_at',
+        'photo'
+    ];
+
     /**
      * @return string
      */
     protected function getModelClass(): string
     {
-        return Model::class;
+        return User::class;
     }
 
+    /**
+     * @param int $count
+     * @param int $page
+     *
+     * @return mixed
+     */
     public function getUsersWithPagination(int $count, int $page)
     {
-        $columns = [
-            'id',
-            'name',
-            'email',
-            'phone',
-            'position_id',
-            'created_at',
-            'photo'
-        ];
-
         $users = $this->startCondition()
-            ->select($columns)
+            ->select($this->columns)
             ->orderBy('id')
             ->with(['position:id,name'])
             ->paginate($count)
@@ -42,37 +47,53 @@ class UserRepository extends CoreRepository implements UserRepositoryInterface
 
         $users->appends(['count' => $count]);
 
-        if ($users->lastPage() > $page) {
-            $usersResource = UserCollection::make($users);
-        } else {
-            throw new NotFoundHttpException;
-        }
-
-        return $usersResource;
+        return $users;
     }
 
+    /**
+     * @param int $count
+     * @param int $offset
+     *
+     * @return mixed
+     */
     public function getUsersByOffset(int $count, int $offset)
     {
         $users = $this->startCondition()
+            ->select($this->columns)
             ->skip($offset)
             ->take($count)
             ->orderBy('id')
             ->get();
 
-        return $users;
+        return  $users;
     }
 
-    public function getUserById($id)
+
+    public function saveUser(object $model)
     {
-        if (!is_numeric($id)) {
-            return throw new UserValidateRouteParameterException();
-        }
+        return DB::transaction(function () use ($model) {
+            $model->password = Hash::make('password');
+            $model->save();
+        });
+    }
 
-        $user = $this->startCondition()->find($id);
-        if (!$user) {
-            return throw new UserNotFoundException();
-        }
+    /**
+     * @param int $id
+     *
+     * @return mixed
+     */
+    public function getUserById(int $id)
+    {
+        return $this->startCondition()->find($id);
+    }
 
-        return UserShowResource::make($user);
+    /**
+     * @param string $email
+     *
+     * @return mixed
+     */
+    public function getUserIdByEmail(string $email)
+    {
+        return $this->startCondition()->where('email', $email)->first();
     }
 }

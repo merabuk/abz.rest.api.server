@@ -1,10 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\PositionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,11 +13,12 @@ use App\Http\Controllers\PositionController;
 |
 */
 
-Route::group(['prefix' => '/v1'], function () {
-    Route::get('/token', [AuthController::class, 'login'])->name('token');
-    //TODO user group
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::post('/users', [UserController::class, 'create'])->name('users.create');
-    Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
-    Route::get('/positions', [PositionController::class, 'index'])->name('positions.index');
+Route::group(['prefix' => '/v1', 'namespace' => 'App\Http\Controllers\Api',], function () {
+    Route::get('/token', ['as' => 'token', 'uses' => 'AuthController@login']);
+    Route::group(['prefix' => '/users','as'=>'users.'], function () {
+        Route::get('/', ['as' => 'index', 'uses' => 'UserController@index']);
+        Route::post('/', ['as' => 'store', 'uses' => 'UserController@store']);
+        Route::get('/{id}', ['as' => 'show', 'uses' => 'UserController@show']);
+    });
+    Route::get('/positions', ['as' => 'positions.index', 'uses' => 'PositionController@index']);
 });

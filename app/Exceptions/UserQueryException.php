@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 
-class UserValidateRouteParameterException extends Exception
+class UserQueryException extends Exception
 {
     /**
      * Render the exception as an HTTP response.
@@ -16,10 +16,9 @@ class UserValidateRouteParameterException extends Exception
     {
         if ($request->wantsJson()) {
             $data['success'] = false;
-            $data['message'] = 'Validation failed';
-            $data['fails']['user_id'] = ['The user_id must be an integer.'];
+            $data['message'] = 'User with this phone or email already exist';
 
-            return response()->json($data, 400);
+            return response()->json($data, 409);
         }
     }
 }
