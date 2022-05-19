@@ -66,7 +66,7 @@ class UserController extends ApiController
     public function show(GetUser $action, $id): JsonResponse
     {
         if (!is_numeric($id)) {
-            return throw new UserValidateRouteParameterException();
+            throw new UserValidateRouteParameterException();
         }
 
         $data = UserShowResource::make($action->execute($id));

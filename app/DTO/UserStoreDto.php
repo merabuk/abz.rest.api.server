@@ -27,10 +27,10 @@ class UserStoreDto
     public static function fromRequest(Request $request): UserStoreDto
     {
         return new static(
-            name: $request->get('name'),
-            email: $request->get('email'),
-            phone: $request->get('phone'),
-            positionId: $request->get('position_id')
+            $request->get('name'),
+            $request->get('email'),
+            $request->get('phone'),
+            $request->get('position_id')
         );
     }
 
