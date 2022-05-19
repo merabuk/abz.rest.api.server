@@ -17,7 +17,7 @@ Route::group(['prefix' => '/v1', 'namespace' => 'App\Http\Controllers\Api',], fu
     Route::get('/token', ['as' => 'token', 'uses' => 'AuthController@login']);
     Route::group(['prefix' => '/users','as'=>'users.'], function () {
         Route::get('/', ['as' => 'index', 'uses' => 'UserController@index']);
-        Route::post('/', ['as' => 'store', 'uses' => 'UserController@store']);
+        Route::post('/', ['as' => 'store', 'middleware' => 'auth:api, jwt.refresh', 'uses' => 'UserController@store']);
         Route::get('/{id}', ['as' => 'show', 'uses' => 'UserController@show']);
     });
     Route::get('/positions', ['as' => 'positions.index', 'uses' => 'PositionController@index']);

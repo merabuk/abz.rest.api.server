@@ -6,10 +6,10 @@ use Illuminate\Http\Request;
 
 class UserStoreDto
 {
-    private string $name;
-    private string $email;
-    private string $phone;
-    private int $positionId;
+    private $name;
+    private $email;
+    private $phone;
+    private $positionId;
 
     public function __construct(
         string $name,
