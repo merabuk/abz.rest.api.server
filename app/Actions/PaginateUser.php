@@ -8,7 +8,10 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class PaginateUser
 {
-    private UserRepositoryInterface $repository;
+    /**
+     * @var UserRepositoryInterface
+     */
+    private $repository;
 
     public function __construct(UserRepositoryInterface $repository)
     {

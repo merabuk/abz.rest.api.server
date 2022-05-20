@@ -12,8 +12,14 @@ use Illuminate\Database\QueryException;
 
 class SaveUser
 {
-    private UserRepositoryInterface $repository;
-    private UserMapper $mapper;
+    /**
+     * @var UserRepositoryInterface
+     */
+    private $repository;
+    /**
+     * @var UserMapper
+     */
+    private $mapper;
 
     public function __construct(UserRepositoryInterface $repository, UserMapper $mapper)
     {
@@ -28,7 +34,7 @@ class SaveUser
      * @throws UserNotFoundException
      * @throws UserQueryException
      */
-    public function execute(UserStoreDto $dto)
+    public function execute(UserStoreDto $dto): User
     {
         $userMap = $this->mapper->handle($dto);
         try {

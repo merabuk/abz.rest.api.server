@@ -2,8 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Exceptions\PositionNotFoundException;
-use App\Http\Resources\PositionCollection;
 use App\Interfaces\PositionRepositoryInterface;
 use App\Models\Position as Model;
 
@@ -12,7 +10,7 @@ class PositionRepository extends CoreRepository implements PositionRepositoryInt
     /**
      * @var string[]
      */
-    protected array $columns = [
+    protected $columns = [
         'id',
         'name',
     ];
@@ -26,17 +24,10 @@ class PositionRepository extends CoreRepository implements PositionRepositoryInt
     }
 
     /**
-     * @return PositionCollection
-     * @throws PositionNotFoundException
+     * @return mixed
      */
     public function getAllPosition()
     {
-        $positions = $this->startCondition()->select($this->columns)->get();
-
-        if ($positions->isEmpty()) {
-            throw new PositionNotFoundException();
-        }
-
-        return PositionCollection::make($positions);
+        return $this->startCondition()->select($this->columns)->get();
     }
 }

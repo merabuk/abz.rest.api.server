@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\GetPositions;
+use App\Http\Resources\PositionCollection;
 use App\Interfaces\PositionRepositoryInterface;
-use http\Env\Response;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class PositionController extends ApiController
 {
     /**
      * @var PositionRepositoryInterface
      */
-    protected PositionRepositoryInterface $positionRepository;
+    protected $positionRepository;
 
     public function __construct()
     {
@@ -20,12 +20,17 @@ class PositionController extends ApiController
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @param GetPositions $action
+     *
+     * @return JsonResponse
+     * @throws \App\Exceptions\PositionNotFoundException
      */
-    public function index(): JsonResponse
+    public function index(GetPositions $action): JsonResponse
     {
-        $positions = $this->positionRepository->getAllPosition();
+        $positions = $action->execute();
 
-        return response()->json($positions, 200);
+        $data = PositionCollection::make($positions);
+
+        return response()->json($data, 200);
     }
 }

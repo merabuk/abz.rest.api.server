@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -42,5 +43,12 @@ class Handler extends ExceptionHandler
                 throw new NotFoundException();
             }
         });
+
+        $this->renderable(function (AuthenticationException $e, $request) {
+            if ($request->wantsJson()) {
+                throw new TokenExpiredException();
+            }
+        });
+
     }
 }

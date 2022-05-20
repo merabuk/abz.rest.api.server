@@ -12,7 +12,7 @@ class UserRepository extends CoreRepository implements UserRepositoryInterface
     /**
      * @var string[]
      */
-    protected array $columns = [
+    protected $columns = [
         'id',
         'name',
         'email',

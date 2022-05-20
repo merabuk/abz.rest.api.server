@@ -18,11 +18,6 @@ use Illuminate\Http\JsonResponse;
 
 class UserController extends ApiController
 {
-//    public function __construct()
-//    {
-//        $this->middleware('auth:api', ['only' => ['store']]);
-//    }
-//
     /**
      * @param IndexUsersRequest $request
      * @param PaginateUser $paginateUserAction

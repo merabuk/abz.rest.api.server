@@ -8,7 +8,10 @@ use App\Models\User;
 
 class OffsetUser
 {
-    private UserRepositoryInterface $repository;
+    /**
+     * @var UserRepositoryInterface
+     */
+    private $repository;
 
     public function __construct(UserRepositoryInterface $repository)
     {
