@@ -18,7 +18,8 @@ class UserMapper
             'name' => $dto->getName(),
             'email' => $dto->getEmail(),
             'phone' => $dto->getPhone(),
-            'position_id' => $dto->getPositionId()
+            'position_id' => $dto->getPositionId(),
+            'photo' => $dto->getPhoto()
         ]);
     }
 }

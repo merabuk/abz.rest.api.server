@@ -10,18 +10,21 @@ class UserStoreDto
     private $email;
     private $phone;
     private $positionId;
+    private $photo;
 
     public function __construct(
         string $name,
         string $email,
         string $phone,
-        int $positionId
+        int $positionId,
+        object $photo
     )
     {
         $this->name = $name;
         $this->email = $email;
         $this->phone = $phone;
         $this->positionId = $positionId;
+        $this->photo = $photo;
     }
 
     public static function fromRequest(Request $request): UserStoreDto
@@ -30,7 +33,8 @@ class UserStoreDto
             $request->get('name'),
             $request->get('email'),
             $request->get('phone'),
-            $request->get('position_id')
+            $request->get('position_id'),
+            $request->file('photo')
         );
     }
 
@@ -64,6 +68,14 @@ class UserStoreDto
     public function getPositionId(): int
     {
         return $this->positionId;
+    }
+
+    /**
+     * @return object
+     */
+    public function getPhoto(): object
+    {
+        return $this->photo;
     }
 
     /**
