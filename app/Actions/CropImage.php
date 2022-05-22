@@ -22,7 +22,7 @@ class CropImage
         $resultData = $this->service::fromBuffer($sourceData);
 
         $resized = $resultData->resize(array(
-            "method" => "fit", //thumb
+            "method" => "cover", //thumb, fit
             "width" => 70,
             "height" => 70
         ));

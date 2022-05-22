@@ -32,4 +32,16 @@ class CreateUsersRequest extends AbstractApiRequest
             'photo' => 'sometimes|required|file|dimensions:min_width=70,min_height=70|mimes:jpeg,jpg|max:5120',
         ];
     }
+
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'photo.dimensions' => 'The photo dimensions must be greeter than 70x70px.',
+        ];
+    }
 }

@@ -50,7 +50,7 @@ class SaveUser
         $userMap = $this->mapper->handle($dto);
 
         $photoPath = $this->cropImage->execute($userMap->photo);
-        $fullUserPhotoPath = public_path('storage').'/'.$photoPath;
+        $fullUserPhotoPath = env('APP_URL').'/storage/'.$photoPath;
         $userMap->photo = $fullUserPhotoPath;
         try {
             $this->repository->saveUser($userMap);
