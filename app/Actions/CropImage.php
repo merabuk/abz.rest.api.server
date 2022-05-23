@@ -2,12 +2,13 @@
 
 namespace App\Actions;
 
-use App\Tinify\Facades\Tinify;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use App\Services\Tinify;
 
 class CropImage
 {
+    /**
+     * @var Tinify
+     */
     private $service;
 
     public function __construct(Tinify $service)
@@ -15,11 +16,15 @@ class CropImage
         $this->service = $service;
     }
 
-
-    public function execute($photo)
+    /**
+     * @param object $photo
+     *
+     * @return object
+     */
+    public function execute(object $photo): object
     {
         $sourceData = file_get_contents($photo);
-        $resultData = $this->service::fromBuffer($sourceData);
+        $resultData = $this->service->fromBuffer($sourceData);
 
         $resized = $resultData->resize(array(
             "method" => "cover", //thumb, fit
@@ -29,11 +34,6 @@ class CropImage
 
         $resized = $resized->toBuffer();
 
-        $fileName = Str::random(60);
-        $path = 'photo/'.$fileName.'.jpg';
-
-        Storage::disk('public')->put($path, $resized);
-
-        return $path;
+        return $resized;
     }
 }

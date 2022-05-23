@@ -17,6 +17,10 @@ class GetPositions
         $this->repository = $repository;
     }
 
+    /**
+     * @return mixed
+     * @throws PositionNotFoundException
+     */
     public function execute()
     {
         $positions = $this->repository->getAllPosition();

@@ -15,18 +15,19 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         $user =  [
-            'id' => $this->resource->id,
-            'name' => $this->resource->name,
-            'email' => $this->resource->email,
-            'phone' => $this->resource->phone,
-            'position' => $this->resource->position->name,
-            'position_id' => $this->resource->position_id,
-            'registration_timestamp' => $this->resource->created_at->timestamp,
-            'photo' => $this->resource->photo
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
+            'phone' => $this->phone,
+            'position' => $this->position->name,
+            'position_id' => $this->position_id,
+            $this->mergeWhen(is_null($this->updated_at), [
+                'registration_timestamp' => $this->created_at->timestamp,
+            ]),
+            'photo' => $this->photo
         ];
 
-        if (isset($this->resource->updated_at)) {
-            unset($user['registration_timestamp']);
+        if (isset($this->updated_at)) {
             return [
                 'success' => true,
                 'user' => $user

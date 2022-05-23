@@ -22,15 +22,13 @@ class PositionController extends ApiController
     /**
      * @param GetPositions $action
      *
-     * @return JsonResponse
+     * @return PositionCollection
      * @throws \App\Exceptions\PositionNotFoundException
      */
-    public function index(GetPositions $action): JsonResponse
+    public function index(GetPositions $action): PositionCollection
     {
         $positions = $action->execute();
 
-        $data = PositionCollection::make($positions);
-
-        return response()->json($data, 200);
+        return PositionCollection::make($positions);
     }
 }

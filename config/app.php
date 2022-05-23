@@ -176,8 +176,6 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         App\Providers\RepositoryServiceProvider::class,
-        // Tinify
-        App\Tinify\LaravelTinifyServiceProvider::class,
         // JWT tokens
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
     ],
@@ -231,9 +229,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        // Tinify
-        'Tinify' => App\Tinify\Facades\Tinify::class,
-
     ],
 
 ];

@@ -22,10 +22,13 @@ class UserController extends ApiController
      * @param PaginateUser $paginateUserAction
      * @param OffsetUser $offsetUserAction
      *
-     * @return JsonResponse
+     * @return UserCollection
      * @throws \App\Exceptions\NotFoundException
      */
-    public function index(IndexUsersRequest $request, PaginateUser $paginateUserAction, OffsetUser $offsetUserAction): JsonResponse
+    public function index(
+        IndexUsersRequest $request,
+        PaginateUser $paginateUserAction,
+        OffsetUser $offsetUserAction): UserCollection
     {
         $count = $request->input('count', BaseEntity::COUNT);
         $offset = $request->input('offset', BaseEntity::OFFSET);
@@ -37,9 +40,7 @@ class UserController extends ApiController
             $collection = $paginateUserAction->execute($count, $page);
         }
 
-        $data = UserCollection::make($collection);
-
-        return response()->json($data, 200);
+        return UserCollection::make($collection);
     }
 
     public function store(CreateUsersRequest $request, SaveUser $action)

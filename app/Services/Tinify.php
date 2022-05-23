@@ -1,13 +1,12 @@
 <?php
-namespace App\Tinify\Services;
+namespace App\Services;
 
 use http\Exception\InvalidArgumentException;
 use Tinify\AccountException;
 use Tinify\ClientException;
 use Tinify\Source;
-use Tinify\Tinify;
 
-class TinifyService
+class Tinify
 {
     private $apikey;
     private $client;
