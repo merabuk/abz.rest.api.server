@@ -10,8 +10,7 @@ use App\Exceptions\UserValidateRouteParameterException;
 use App\Http\Requests\Api\CreateUsersRequest;
 use App\Http\Requests\Api\IndexUsersRequest;
 use App\Http\Resources\UserCollection;
-use App\Http\Resources\UserOffsetCollection;
-use App\Http\Resources\UserShowResource;
+use App\Http\Resources\UserResource;
 use App\Models\BaseEntity;
 use App\DTO\UserStoreDto;
 use Illuminate\Http\JsonResponse;
@@ -33,10 +32,12 @@ class UserController extends ApiController
         $page = $request->input('page', BaseEntity::PAGE);
 
         if ($offset && $offset > 0) {
-            $data = UserOffsetCollection::make($offsetUserAction->execute($count, $offset));
+            $collection = $offsetUserAction->execute($count, $offset);
         } else {
-            $data = UserCollection::make($paginateUserAction->execute($count, $page));
+            $collection = $paginateUserAction->execute($count, $page);
         }
+
+        $data = UserCollection::make($collection);
 
         return response()->json($data, 200);
     }
@@ -69,7 +70,7 @@ class UserController extends ApiController
             throw new UserValidateRouteParameterException();
         }
 
-        $data = UserShowResource::make($action->execute($id));
+        $data = UserResource::make($action->execute($id));
 
         return response()->json($data, 200);
     }

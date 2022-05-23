@@ -14,15 +14,25 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'email' => $this->email,
-            'phone' => $this->phone,
-            'position' => $this->position->name,
-            'position_id' => $this->position_id,
-            'registration_timestamp' => $this->created_at->timestamp,
-            'photo' => $this->photo ?? 'No photo' // TODO remove ??
+        $user =  [
+            'id' => $this->resource->id,
+            'name' => $this->resource->name,
+            'email' => $this->resource->email,
+            'phone' => $this->resource->phone,
+            'position' => $this->resource->position->name,
+            'position_id' => $this->resource->position_id,
+            'registration_timestamp' => $this->resource->created_at->timestamp,
+            'photo' => $this->resource->photo
         ];
+
+        if (isset($this->resource->updated_at)) {
+            unset($user['registration_timestamp']);
+            return [
+                'success' => true,
+                'user' => $user
+            ];
+        }
+
+        return $user;
     }
 }
