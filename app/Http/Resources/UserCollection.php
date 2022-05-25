@@ -18,67 +18,38 @@ class UserCollection extends ResourceCollection
         'success' => true
     ];
 
-//    private $pagination;
-//
-//    public function __construct($resource)
-//    {
-//        if ($resource instanceof LengthAwarePaginator) {
-//            $this->pagination = [
-//                'page' => $resource->currentPage(),
-//                'total_pages' => $resource->lastPage(),
-//                'total_users' => $resource->total(),
-//                'count' => $resource->perPage(),
-//                'links' => [
-//                    'next_url' => $resource->nextPageUrl(),
-//                    'prev_url' => $resource->previousPageUrl(),
-//                ],
-//            ];
-//            $resource = $resource->getCollection();
-//        }
-//
-//        parent::__construct($resource);
-//    }
-//
-//    public function toArray($request)
-//    {
-//        return [
-//            'pagination' => $this->pagination,
-//            'users' => $this->collection
-//        ];
-//    }
 
-    /**
-     * Transform the resource collection into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
-     */
     public function toArray($request)
     {
         return [
-            $this->mergeWhen($this->resource instanceof LengthAwarePaginator, [
-                'page' => $this->currentPage(),
-                'total_pages' => $this->lastPage(),
-                'total_users' => $this->total(),
-                'count' => $this->perPage(),
-                'links' => [
-                    'next_url' => $this->nextPageUrl(),
-                    'prev_url' => $this->previousPageUrl(),
-                ],
-            ]),
-            'users' =>  UserResource::collection($this->collection),
+            'users' => UserResource::collection($this->collection),
         ];
     }
 
     /**
-     * Get additional data that should be returned with the resource array.
+     * Customize the outgoing response for the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return array
+     * @param  \Illuminate\Http\JsonResponse  $response
+     * @return void
      */
-    public function with($request)
+    public function withResponse($request, $response)
     {
-        return [];
-
+        if ($this->resource instanceof LengthAwarePaginator) {
+            $paginator = [
+                'page' => $this->resource->currentPage(),
+                'total_pages' => $this->resource->lastPage(),
+                'total_users' => $this->resource->total(),
+                'count' => $this->resource->perPage(),
+                'links' => [
+                    'next_url' => $this->resource->nextPageUrl(),
+                    'prev_url' => $this->resource->previousPageUrl(),
+                ]
+            ];
+            $responseData = $response->getData(true);
+            unset($responseData['meta'], $responseData['links']);
+            $result = array_merge($paginator, $responseData);
+            $response->setData($result);
+        }
     }
 }

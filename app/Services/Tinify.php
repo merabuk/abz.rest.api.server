@@ -5,10 +5,18 @@ use http\Exception\InvalidArgumentException;
 use Tinify\AccountException;
 use Tinify\ClientException;
 use Tinify\Source;
+use Tinify\Tinify as Service;
 
 class Tinify
 {
+    /**
+     * @var string
+     */
     private $apikey;
+
+    /**
+     * @var Service
+     */
     private $client;
 
     /**
@@ -22,7 +30,7 @@ class Tinify
         if(!$this->apikey) {
             throw new InvalidArgumentException('Please set TINIFY_APIKEY environment variables.');
         }
-        $this->client = new Tinify();
+        $this->client = new Service();
         $this->client->setKey($this->apikey);
     }
 
@@ -56,7 +64,7 @@ class Tinify
 
     function validate() {
         try {
-            Tinify::getClient()->request("post", "/shrink");
+            Service::getClient()->request("post", "/shrink");
         } catch (AccountException $err) {
             if ($err->status == 429) return true;
             throw $err;

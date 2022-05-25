@@ -2,38 +2,23 @@
 
 namespace App\Actions;
 
+use App\Services\Tinify;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class SaveImage
 {
     /**
-     * @var Storage
-     */
-    private $storage;
-
-    /**
-     * @var Str
-     */
-    private $str;
-
-    public function __construct(Storage $storage, Str $str)
-    {
-        $this->storage = $storage;
-        $this->str = $str;
-    }
-
-    /**
-     * @param object $photo
+     * @param string $photo
      *
      * @return string
      */
-    public function execute(object $photo): string
+    public function execute(string $photo): string
     {
-        $fileName = $this->str->random(60);
+        $fileName = Str::random(60);
         $path = 'photo/'.$fileName.'.jpg';
 
-        $this->storage->disk('public')->put($path, $photo);
+        Storage::disk('public')->put($path, $photo);
 
         return $path;
     }

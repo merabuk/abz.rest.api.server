@@ -22,13 +22,13 @@ class UserController extends ApiController
      * @param PaginateUser $paginateUserAction
      * @param OffsetUser $offsetUserAction
      *
-     * @return UserCollection
+     * @return //UserCollection
      * @throws \App\Exceptions\NotFoundException
      */
     public function index(
         IndexUsersRequest $request,
         PaginateUser $paginateUserAction,
-        OffsetUser $offsetUserAction): UserCollection
+        OffsetUser $offsetUserAction)//: UserCollection
     {
         $count = $request->input('count', BaseEntity::COUNT);
         $offset = $request->input('offset', BaseEntity::OFFSET);
@@ -43,7 +43,15 @@ class UserController extends ApiController
         return UserCollection::make($collection);
     }
 
-    public function store(CreateUsersRequest $request, SaveUser $action)
+    /**
+     * @param CreateUsersRequest $request
+     * @param SaveUser $action
+     *
+     * @return JsonResponse
+     * @throws \App\Exceptions\UserNotFoundException
+     * @throws \App\Exceptions\UserQueryException
+     */
+    public function store(CreateUsersRequest $request, SaveUser $action): JsonResponse
     {
         $userDto = UserStoreDto::fromRequest($request);
         $user = $action->execute($userDto);
@@ -61,18 +69,16 @@ class UserController extends ApiController
      * @param GetUser $action
      * @param $id
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return UserResource
      * @throws UserValidateRouteParameterException
      * @throws \App\Exceptions\UserNotFoundException
      */
-    public function show(GetUser $action, $id): JsonResponse
+    public function show(GetUser $action, $id): UserResource
     {
         if (!is_numeric($id)) {
             throw new UserValidateRouteParameterException();
         }
 
-        $data = UserResource::make($action->execute($id));
-
-        return response()->json($data, 200);
+        return UserResource::make($action->execute($id));
     }
 }

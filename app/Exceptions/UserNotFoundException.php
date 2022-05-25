@@ -19,7 +19,7 @@ class UserNotFoundException extends Exception
             $data['message'] = 'The user with the requested identifier does not exist';
             $data['fails']['user_id'] = ['User not found'];
 
-            return response()->json($data, 400);
+            return response()->json($data, 404);
         }
     }
 }

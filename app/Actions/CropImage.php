@@ -19,9 +19,9 @@ class CropImage
     /**
      * @param object $photo
      *
-     * @return object
+     * @return string
      */
-    public function execute(object $photo): object
+    public function execute(object $photo): string
     {
         $sourceData = file_get_contents($photo);
         $resultData = $this->service->fromBuffer($sourceData);
