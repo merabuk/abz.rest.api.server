@@ -28,7 +28,7 @@ class CreateUsersRequest extends AbstractApiRequest
             'name' => 'required|string|min:2|max:60',
             'email' => ['required', 'string', 'min:2', 'max:100', new EmailRfc2822], //email:rfc
             'phone' => ['required', 'string', new PhoneNumberUa],
-            'position_id' => 'required|integer|min:1',
+            'position_id' => 'required|integer|min:1|exists:positions,id',
             'photo' => 'sometimes|required|file|dimensions:min_width=70,min_height=70|mimes:jpeg,jpg|max:5120',
         ];
     }

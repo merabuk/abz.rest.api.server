@@ -29,6 +29,8 @@ class UpdateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropColumns('users', ['position_id']);
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign('users_position_id_foreign');
+        });
     }
 }

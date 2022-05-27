@@ -10,10 +10,10 @@ use App\Exceptions\UserValidateRouteParameterException;
 use App\Http\Requests\Api\CreateUsersRequest;
 use App\Http\Requests\Api\IndexUsersRequest;
 use App\Http\Resources\UserCollection;
+use App\Http\Resources\UserCreatedResource;
 use App\Http\Resources\UserResource;
 use App\Models\BaseEntity;
 use App\DTO\UserStoreDto;
-use Illuminate\Http\JsonResponse;
 
 class UserController extends ApiController
 {
@@ -22,13 +22,13 @@ class UserController extends ApiController
      * @param PaginateUser $paginateUserAction
      * @param OffsetUser $offsetUserAction
      *
-     * @return //UserCollection
+     * @return UserCollection
      * @throws \App\Exceptions\NotFoundException
      */
     public function index(
         IndexUsersRequest $request,
         PaginateUser $paginateUserAction,
-        OffsetUser $offsetUserAction)//: UserCollection
+        OffsetUser $offsetUserAction): UserCollection
     {
         $count = $request->input('count', BaseEntity::COUNT);
         $offset = $request->input('offset', BaseEntity::OFFSET);
@@ -47,22 +47,16 @@ class UserController extends ApiController
      * @param CreateUsersRequest $request
      * @param SaveUser $action
      *
-     * @return JsonResponse
+     * @return UserCreatedResource
      * @throws \App\Exceptions\UserNotFoundException
      * @throws \App\Exceptions\UserQueryException
      */
-    public function store(CreateUsersRequest $request, SaveUser $action): JsonResponse
+    public function store(CreateUsersRequest $request, SaveUser $action): UserCreatedResource
     {
         $userDto = UserStoreDto::fromRequest($request);
         $user = $action->execute($userDto);
 
-        $data = [
-            'success' => true,
-            'user_id' => $user->id,
-            'message' => 'New user successfully registered'
-        ];
-
-        return response()->json($data, 200);
+        return UserCreatedResource::make($user);
     }
 
     /**
@@ -79,6 +73,8 @@ class UserController extends ApiController
             throw new UserValidateRouteParameterException();
         }
 
-        return UserResource::make($action->execute($id));
+        $user = $action->execute($id);
+
+        return UserResource::make($user);
     }
 }

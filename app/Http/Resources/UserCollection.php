@@ -14,11 +14,23 @@ class UserCollection extends ResourceCollection
      */
     public static $wrap = 'users';
 
+    /**
+     * The additional meta data that should be added to the resource response.
+     *
+     * Added during response construction by the developer.
+     *
+     * @var array
+     */
     public $additional = [
         'success' => true
     ];
 
-
+    /**
+     * Transform the resource collection into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     */
     public function toArray($request)
     {
         return [
